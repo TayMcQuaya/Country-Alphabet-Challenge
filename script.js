@@ -30,6 +30,8 @@ const countriesByLetter = {
 // Game state
 let currentLetter = 'A';
 let gameOver = false;
+let timerInterval = null;
+let timeLeft = 10;
 
 // DOM elements
 const letterDisplay = document.getElementById('current-letter').querySelector('span');
@@ -41,11 +43,13 @@ const stateMessage = document.getElementById('state-message');
 const restartBtn = document.getElementById('state-restart-btn');
 const successSound = document.getElementById('success-sound');
 const failureSound = document.getElementById('failure-sound');
+const timerDisplay = document.getElementById('timer');
 
 // Initialize game
 function initGame() {
     currentLetter = 'A';
     gameOver = false;
+    timeLeft = 10;
     letterDisplay.textContent = currentLetter;
     messageDisplay.textContent = `Type a country starting with ${currentLetter}`;
     messageDisplay.className = '';
@@ -60,11 +64,44 @@ function initGame() {
     stateMessage.textContent = '';
     gameState.className = 'hidden';
     
+    // Reset and start timer
+    clearInterval(timerInterval);
+    startTimer();
+    
     // Focus input
     requestAnimationFrame(() => {
         input.focus();
         enableInput();
     });
+}
+
+// Timer functions
+function startTimer() {
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        
+        if (timeLeft <= 3) {
+            timerDisplay.classList.add('warning');
+        }
+        
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            endGame('TIME\'S UP!');
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    timerDisplay.textContent = timeLeft;
+}
+
+function resetTimer() {
+    clearInterval(timerInterval);
+    timeLeft = 10;
+    timerDisplay.classList.remove('warning');
+    startTimer();
 }
 
 // Function to enable input
@@ -116,18 +153,21 @@ function moveToNextLetter() {
     }
 
     if (nextIndex >= 26) {
+        clearInterval(timerInterval);
         showSuccess();
     } else {
         currentLetter = alphabet[nextIndex];
         letterDisplay.textContent = currentLetter;
         messageDisplay.textContent = `Type a country starting with ${currentLetter}`;
         messageDisplay.className = '';
+        resetTimer();
         input.focus();
     }
 }
 
 // End game
 function endGame(message) {
+    clearInterval(timerInterval);
     gameContent.classList.add('hidden');
     gameState.classList.remove('hidden');
     stateMessage.textContent = message;
@@ -138,6 +178,7 @@ function endGame(message) {
 
 // Show success
 function showSuccess() {
+    clearInterval(timerInterval);
     gameContent.classList.add('hidden');
     gameState.classList.remove('hidden');
     stateMessage.textContent = 'SUCCESS';
