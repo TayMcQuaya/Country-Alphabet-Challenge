@@ -1,0 +1,184 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.game-container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 40px 60px;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 700px;
+    width: 100%;
+    border: 3px solid #ffe66d;
+    position: relative;
+}
+
+h1 {
+    color: #ff4757;
+    font-size: 3.5em;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#current-letter {
+    font-size: 2em;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+#current-letter span {
+    font-weight: bold;
+    color: #1dd1a1;
+    font-size: 1.2em;
+}
+
+#message {
+    font-size: 1.8em;
+    color: #576574;
+    margin: 20px 0;
+    min-height: 2em;
+    font-weight: bold;
+}
+
+#game-content {
+    position: relative;
+    z-index: 1;
+}
+
+#country-input {
+    width: 85%;
+    padding: 15px;
+    font-size: 1.5em;
+    border: 3px solid #54a0ff;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    position: relative;
+    z-index: 2;
+}
+
+#country-input:focus {
+    border-color: #ff9f43;
+    box-shadow: 0 0 10px rgba(255, 159, 67, 0.5);
+}
+
+/* Game State Styles */
+#game-state {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    animation: fadeIn 0.5s ease-in-out;
+    z-index: 5;
+    pointer-events: none;
+}
+
+#game-state:not(.hidden) {
+    pointer-events: auto;
+}
+
+#state-message {
+    font-size: 4em;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+#game-state.success {
+    background: linear-gradient(135deg, #1dd1a1, #10ac84);
+    color: white;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+#game-state.success #state-message {
+    animation: pulse 1s infinite;
+}
+
+#game-state.wrong {
+    background: linear-gradient(135deg, #ff6b6b, #ff4757);
+    color: white;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+#game-state.wrong #state-message {
+    animation: shake 0.5s;
+}
+
+.state-restart {
+    padding: 15px 40px;
+    font-size: 1.5em;
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: calc(100% + 20px);
+    z-index: 10;
+}
+
+/* When game over/success state is active, move button to center */
+#game-state:not(.hidden) ~ .state-restart {
+    top: 50%;
+    transform: translate(-50%, 100px);
+    z-index: 10;
+}
+
+.state-restart:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    background: #ff4757;
+}
+
+/* Hover effect for normal state */
+.state-restart:hover {
+    transform: translateX(-50%) translateY(-2px);
+}
+
+/* Hover effect for game over/success state */
+#game-state:not(.hidden) ~ .state-restart:hover {
+    transform: translate(-50%, 98px);
+}
+
+/* Feedback Classes */
+.correct {
+    color: #00d2d3;
+    text-shadow: 1px 1px 3px rgba(0, 210, 211, 0.5);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); }
+    75% { transform: translateX(-10px); }
+    100% { transform: translateX(0); }
+}
